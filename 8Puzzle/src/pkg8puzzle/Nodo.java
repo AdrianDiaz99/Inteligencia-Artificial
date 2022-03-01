@@ -9,7 +9,6 @@ public class Nodo {
     
     public Nodo(int [] puzzle){
         this.puzzle = puzzle;
-        visitado = false;
     }
     
     public int [] getPuzzle(){
