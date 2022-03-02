@@ -2,10 +2,10 @@
 package pkg8puzzle;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Nodo {
+public class Nodo implements Comparable<Nodo>{
     private int [] puzzle;
-    private ArrayList<Nodo> siguientesEstados;
     
     public Nodo(int [] puzzle){
         this.puzzle = puzzle;
@@ -19,16 +19,34 @@ public class Nodo {
         this.puzzle = puzzle;
     }
     
-    public void asignarSiguientesEstados(ArrayList<Nodo> puzzles){
-        siguientesEstados = puzzles;
+    public String mostrarCuadrito(){
+        String res = "";
+        for(int i = 0; i < puzzle.length ; i++){
+            res += puzzle[i];
+            
+            if( (i + 1) % 3 == 0 ){
+                res += "\n";
+                continue;
+            }
+            
+            res += " | ";
+            
+        }
+        return res;
     }
     
-    public boolean agregarNuevoEstado(Nodo puzzle){
-        return siguientesEstados.add(puzzle);
+    public String toString(){
+        return Arrays.toString(puzzle);
     }
-    
-    public ArrayList<Nodo> getSiguientesEstados(){
-        return siguientesEstados;
+
+    @Override
+    public boolean equals(Object o) {
+        return this.toString().equals(((Nodo)o).toString());
+    }
+
+    @Override
+    public int compareTo(Nodo o) {
+        return this.toString().compareTo(o.toString());
     }
     
 }

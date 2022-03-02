@@ -4,42 +4,101 @@ package pkg8puzzle;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.PriorityQueue;
 
 public class Main {
-    
-    int [] estadoObjetivo = {1, 2, 3, 4, 5, 6, 7, 8, 0};
+    int [] arrayObjetivo = {1, 2, 3, 4, 5, 6, 7, 8, 0};
+    Nodo estadoObjetivo = new Nodo(arrayObjetivo);
+    ArrayList<Nodo> visitados = new ArrayList();
+    int profundidad = 1;
     
     public Main(){
         //                      0, 1, 2, /**/  3, 4, 5, /**/  6, 7, 8
         int [] estadoInicial = {3, 2, 5, /**/  8, 0, 6, /**/  1, 4, 7};
         
-        ArrayList<Nodo> visitados = new ArrayList();
-        
-        ArrayList<Nodo> siguientesEstados = generaEstados(estadoInicial);
-        
-//        for(int i=0; i < siguientesEstados.size(); i++){
-//            System.out.println(Arrays.toString(siguientesEstados.get(i).getPuzzle()));
-//        }
-        
         Nodo nodoEstadoInicial = new Nodo(estadoInicial);
         
-        visitados.add(nodoEstadoInicial);
-        nodoEstadoInicial.asignarSiguientesEstados(siguientesEstados);
+        Nodo nodoAux = nodoEstadoInicial;
+        PriorityQueue<Nodo> cola = new PriorityQueue();
+        cola.add(nodoAux);
         
-        buscaEstadoObjetivo(nodoEstadoInicial);
+        int nodosNivel = 1;
+        int numeroNodo = 1;
+        
+        System.out.println("Profundidad: " + profundidad);
+        
+        while(nodoAux != null){
+            
+            System.out.println(nodoAux.mostrarCuadrito());
+            ArrayList<Nodo> nuevosEstados = generaEstados(nodoAux.getPuzzle());
+            
+            for(int i = 0; i < nuevosEstados.size(); i++){
+
+                if(estadoObjetivo.equals(nuevosEstados.get(i))){
+                    System.out.println("----------------------");
+                    System.out.println(nuevosEstados.get(i));
+                    System.out.println("ENCONTRADO");
+                    System.out.println("----------------------");
+                    return;
+                }
+
+            }
+            
+            for(int i = 0; i < nuevosEstados.size(); i++){
+                if(visitados.contains(nuevosEstados.get(i))){
+                    continue;
+                }
+                visitados.add(nuevosEstados.get(i));
+                cola.add(nuevosEstados.get(i));
+            }
+            
+            
+            if(nodosNivel == numeroNodo){
+                profundidad++;
+                System.out.println("Profundidad: " + profundidad);
+                nodosNivel = nuevosEstados.size();
+                numeroNodo = 1;
+            }else
+                numeroNodo++;
+            
+            nodoAux = cola.poll();
+        }
+        
+//        buscaEstadoObjetivo(nodoEstadoInicial);
     }
     
-    public Nodo buscaEstadoObjetivo(Nodo Raiz){
-        
-        if(Arrays.toString(estadoObjetivo).equals(Arrays.toString(Raiz.getPuzzle()))){
-            return Raiz;
-        }
-        
-        for(int i = 0; i < Raiz.getSiguientesEstados().size(); i++){
-            buscaEstadoObjetivo(Raiz.getSiguientesEstados().get(i));
-        }
-        
-    }
+//    public void buscaEstadoObjetivo(Nodo Raiz){
+//        
+//        Raiz.asignarSiguientesEstados(generaEstados(Raiz.getPuzzle()));
+//        
+//        System.out.println("Produndidad: " + profundidad);
+//        for(int i = 0; i < Raiz.getSiguientesEstados().size(); i++){
+//            
+//            
+//            if(estadoObjetivo.equals(Raiz.getSiguientesEstados().get(i))){
+//                System.out.println("----------------------");
+//                System.out.println(Raiz.getSiguientesEstados().get(i));
+//                System.out.println("ENCONTRADO");
+//                System.out.println("----------------------");
+//                return;
+//            }
+//            
+//        }
+//        
+//        profundidad++;
+//        for(int i = 0; i < Raiz.getSiguientesEstados().size(); i++){
+//            
+//            if(visitados.contains(Raiz.getSiguientesEstados().get(i))){
+//                continue;
+//            }
+//            
+//            visitados.add(Raiz.getSiguientesEstados().get(i));
+//            System.out.println(Raiz.getSiguientesEstados().get(i));
+//            
+//            buscaEstadoObjetivo(Raiz.getSiguientesEstados().get(i));
+//        }
+//        
+//    }
     
     public ArrayList<Nodo> generaEstados(int [] puzzle){
         
@@ -49,44 +108,34 @@ public class Main {
         switch(cuadroVacio){
             case 0:{
                 int [] estado1 = {puzzle[1], 0, puzzle[2], puzzle[3], puzzle[4], puzzle[5], puzzle[6], puzzle[7], puzzle[8]};
-                int [] estado2 = {puzzle[3], puzzle[2], puzzle[3], 0, puzzle[4], puzzle[5], puzzle[6], puzzle[7], puzzle[8]};
-                Nodo nodo1 = new Nodo(estado1);
-                Nodo nodo2 = new Nodo(estado2);
-                siguientesEstados.add(nodo1);
-                siguientesEstados.add(nodo2);
+                int [] estado2 = {puzzle[3], puzzle[1], puzzle[2], 0, puzzle[4], puzzle[5], puzzle[6], puzzle[7], puzzle[8]};
+                siguientesEstados.add(new Nodo(estado1));
+                siguientesEstados.add(new Nodo(estado2));
                 break;
             }
             case 1:{
                 int [] estado1 = {0, puzzle[0], puzzle[2], puzzle[3], puzzle[4], puzzle[5], puzzle[6], puzzle[7], puzzle[8]};
                 int [] estado2 = {puzzle[0], puzzle[2], 0, puzzle[3], puzzle[4], puzzle[5], puzzle[6], puzzle[7], puzzle[8]};
                 int [] estado3 = {puzzle[0], puzzle[4], puzzle[2], puzzle[3], 0, puzzle[5], puzzle[6], puzzle[7], puzzle[8]};
-                Nodo nodo1 = new Nodo(estado1);
-                Nodo nodo2 = new Nodo(estado2);
-                Nodo nodo3 = new Nodo(estado3);
-                siguientesEstados.add(nodo1);
-                siguientesEstados.add(nodo2);
-                siguientesEstados.add(nodo3);
+                siguientesEstados.add(new Nodo(estado1));
+                siguientesEstados.add(new Nodo(estado2));
+                siguientesEstados.add(new Nodo(estado3));
                 break;
             }
             case 2:{
                 int [] estado1 = {puzzle[0], 0, puzzle[1], puzzle[3], puzzle[4], puzzle[5], puzzle[6], puzzle[7], puzzle[8]};
                 int [] estado2 = {puzzle[0], puzzle[1], puzzle[5], puzzle[3], puzzle[4], 0, puzzle[6], puzzle[7], puzzle[8]};
-                Nodo nodo1 = new Nodo(estado1);
-                Nodo nodo2 = new Nodo(estado2);
-                siguientesEstados.add(nodo1);
-                siguientesEstados.add(nodo2);
+                siguientesEstados.add(new Nodo(estado1));
+                siguientesEstados.add(new Nodo(estado2));
                 break;
             }
             case 3:{
                 int [] estado1 = {0, puzzle[1], puzzle[2], puzzle[0], puzzle[4], puzzle[5], puzzle[6], puzzle[7], puzzle[8]};
                 int [] estado2 = {puzzle[0], puzzle[1], puzzle[2], puzzle[4], 0, puzzle[5], puzzle[6], puzzle[7], puzzle[8]};
                 int [] estado3 = {puzzle[0], puzzle[1], puzzle[2], puzzle[6], puzzle[4], puzzle[5], 0, puzzle[7], puzzle[8]};
-                Nodo nodo1 = new Nodo(estado1);
-                Nodo nodo2 = new Nodo(estado2);
-                Nodo nodo3 = new Nodo(estado3);
-                siguientesEstados.add(nodo1);
-                siguientesEstados.add(nodo2);
-                siguientesEstados.add(nodo3);
+                siguientesEstados.add(new Nodo(estado1));
+                siguientesEstados.add(new Nodo(estado2));
+                siguientesEstados.add(new Nodo(estado3));
                 break;
             }
             case 4:{
@@ -94,56 +143,42 @@ public class Main {
                 int [] estado2 = {puzzle[0], puzzle[1], puzzle[2], 0, puzzle[3], puzzle[5], puzzle[6], puzzle[7], puzzle[8]};
                 int [] estado3 = {puzzle[0], puzzle[1], puzzle[2], puzzle[3], puzzle[5], 0, puzzle[6], puzzle[7], puzzle[8]};
                 int [] estado4 = {puzzle[0], puzzle[1], puzzle[2], puzzle[3], puzzle[7], puzzle[5], puzzle[6], 0, puzzle[8]};
-                Nodo nodo1 = new Nodo(estado1);
-                Nodo nodo2 = new Nodo(estado2);
-                Nodo nodo3 = new Nodo(estado3);
-                Nodo nodo4 = new Nodo(estado4);
-                siguientesEstados.add(nodo1);
-                siguientesEstados.add(nodo2);
-                siguientesEstados.add(nodo3);
-                siguientesEstados.add(nodo4);
+                siguientesEstados.add(new Nodo(estado1));
+                siguientesEstados.add(new Nodo(estado2));
+                siguientesEstados.add(new Nodo(estado3));
+                siguientesEstados.add(new Nodo(estado4));
                 break;
             }
             case 5:{
                 int [] estado1 = {puzzle[0], puzzle[1], 0, puzzle[3], puzzle[4], puzzle[2], puzzle[6], puzzle[7], puzzle[8]};
                 int [] estado2 = {puzzle[0], puzzle[1], puzzle[2], puzzle[3], 0, puzzle[4], puzzle[6], puzzle[7], puzzle[8]};
                 int [] estado3 = {puzzle[0], puzzle[1], puzzle[2], puzzle[3], puzzle[4], puzzle[8], puzzle[6], puzzle[7], 0};
-                Nodo nodo1 = new Nodo(estado1);
-                Nodo nodo2 = new Nodo(estado2);
-                Nodo nodo3 = new Nodo(estado3);
-                siguientesEstados.add(nodo1);
-                siguientesEstados.add(nodo2);
-                siguientesEstados.add(nodo3);
+                siguientesEstados.add(new Nodo(estado1));
+                siguientesEstados.add(new Nodo(estado2));
+                siguientesEstados.add(new Nodo(estado3));
                 break;
             }
             case 6:{
                 int [] estado1 = {puzzle[0], puzzle[1], puzzle[2], 0, puzzle[4], puzzle[5], puzzle[3], puzzle[7], puzzle[8]};
                 int [] estado2 = {puzzle[0], puzzle[1], puzzle[2], puzzle[3], puzzle[4], puzzle[5], puzzle[7], 0, puzzle[8]};
-                Nodo nodo1 = new Nodo(estado1);
-                Nodo nodo2 = new Nodo(estado2);
-                siguientesEstados.add(nodo1);
-                siguientesEstados.add(nodo2);
+                siguientesEstados.add(new Nodo(estado1));
+                siguientesEstados.add(new Nodo(estado2));
                 break;
             }
             case 7:{
                 int [] estado1 = {puzzle[0], puzzle[1], puzzle[2], puzzle[3], 0, puzzle[5], puzzle[6], puzzle[4], puzzle[8]};
                 int [] estado2 = {puzzle[0], puzzle[1], puzzle[2], puzzle[3], puzzle[4], puzzle[5], 0, puzzle[6], puzzle[8]};
                 int [] estado3 = {puzzle[0], puzzle[1], puzzle[2], puzzle[3], puzzle[4], puzzle[5], puzzle[6], puzzle[8], 0};
-                Nodo nodo1 = new Nodo(estado1);
-                Nodo nodo2 = new Nodo(estado2);
-                Nodo nodo3 = new Nodo(estado3);
-                siguientesEstados.add(nodo1);
-                siguientesEstados.add(nodo2);
-                siguientesEstados.add(nodo3);
+                siguientesEstados.add(new Nodo(estado1));
+                siguientesEstados.add(new Nodo(estado2));
+                siguientesEstados.add(new Nodo(estado3));
                 break;
             }
             case 8:{
                 int [] estado1 = {puzzle[0], puzzle[1], puzzle[2], puzzle[3], puzzle[4], 0, puzzle[6], puzzle[7], puzzle[5]};
                 int [] estado2 = {puzzle[0], puzzle[1], puzzle[2], puzzle[3], puzzle[4], puzzle[5], puzzle[6], 0, puzzle[7]};
-                Nodo nodo1 = new Nodo(estado1);
-                Nodo nodo2 = new Nodo(estado2);
-                siguientesEstados.add(nodo1);
-                siguientesEstados.add(nodo2);
+                siguientesEstados.add(new Nodo(estado1));
+                siguientesEstados.add(new Nodo(estado2));
                 break;
             }
         }
