@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.PriorityQueue;
+import java.util.Stack;
 
 public class Main {
     int [] arrayObjetivo = {1, 2, 3, 4, 5, 6, 7, 8, 0};
@@ -19,86 +20,61 @@ public class Main {
         Nodo nodoEstadoInicial = new Nodo(estadoInicial);
         
         Nodo nodoAux = nodoEstadoInicial;
-        PriorityQueue<Nodo> cola = new PriorityQueue();
-        cola.add(nodoAux);
         
-        int nodosNivel = 1;
-        int numeroNodo = 1;
+        Nodo resultado = inicia(nodoAux);
         
-        System.out.println("Profundidad: " + profundidad);
+        System.out.println("RECORRIDO");
+        imprimeRecorrido(resultado);
         
-        while(nodoAux != null){
+    }
+    
+    public Nodo inicia(Nodo nodo){
+        
+        Stack<Nodo> pila = new Stack();
+        pila.push(nodo);
+        int j = 1;
+        
+        while(!pila.empty()){
             
-            System.out.println(nodoAux.mostrarCuadrito());
-            ArrayList<Nodo> nuevosEstados = generaEstados(nodoAux.getPuzzle());
+            nodo = pila.pop();
+            System.out.println(j + " " + nodo.toString());
+            ArrayList<Nodo> nuevosEstados = generaEstados(nodo.getPuzzle());
             
             for(int i = 0; i < nuevosEstados.size(); i++){
 
+                if(visitados.contains(nuevosEstados.get(i))){
+                    continue;
+                }
+                
                 if(estadoObjetivo.equals(nuevosEstados.get(i))){
                     System.out.println("----------------------");
                     System.out.println(nuevosEstados.get(i));
                     System.out.println("ENCONTRADO");
                     System.out.println("----------------------");
-                    return;
+                    nodo = nuevosEstados.get(i);
+                    return nodo;
                 }
+                
+                visitados.add(nuevosEstados.get(i));
+                pila.push(nuevosEstados.get(i));
+                
+                nuevosEstados.get(i).setPadre(nodo);
 
             }
             
-            for(int i = 0; i < nuevosEstados.size(); i++){
-                if(visitados.contains(nuevosEstados.get(i))){
-                    continue;
-                }
-                visitados.add(nuevosEstados.get(i));
-                cola.add(nuevosEstados.get(i));
-            }
-            
-            
-            if(nodosNivel == numeroNodo){
-                profundidad++;
-                System.out.println("Profundidad: " + profundidad);
-                nodosNivel = nuevosEstados.size();
-                numeroNodo = 1;
-            }else
-                numeroNodo++;
-            
-            nodoAux = cola.poll();
+            j++;
         }
-        
-//        buscaEstadoObjetivo(nodoEstadoInicial);
+        return null;
     }
     
-//    public void buscaEstadoObjetivo(Nodo Raiz){
-//        
-//        Raiz.asignarSiguientesEstados(generaEstados(Raiz.getPuzzle()));
-//        
-//        System.out.println("Produndidad: " + profundidad);
-//        for(int i = 0; i < Raiz.getSiguientesEstados().size(); i++){
-//            
-//            
-//            if(estadoObjetivo.equals(Raiz.getSiguientesEstados().get(i))){
-//                System.out.println("----------------------");
-//                System.out.println(Raiz.getSiguientesEstados().get(i));
-//                System.out.println("ENCONTRADO");
-//                System.out.println("----------------------");
-//                return;
-//            }
-//            
-//        }
-//        
-//        profundidad++;
-//        for(int i = 0; i < Raiz.getSiguientesEstados().size(); i++){
-//            
-//            if(visitados.contains(Raiz.getSiguientesEstados().get(i))){
-//                continue;
-//            }
-//            
-//            visitados.add(Raiz.getSiguientesEstados().get(i));
-//            System.out.println(Raiz.getSiguientesEstados().get(i));
-//            
-//            buscaEstadoObjetivo(Raiz.getSiguientesEstados().get(i));
-//        }
-//        
-//    }
+    public void imprimeRecorrido(Nodo n){
+        if(n == null){
+            return;
+        }
+        imprimeRecorrido(n);
+        System.out.println(n.mostrar());
+        System.out.println("--");
+    }
     
     public ArrayList<Nodo> generaEstados(int [] puzzle){
         

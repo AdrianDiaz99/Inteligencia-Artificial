@@ -6,9 +6,14 @@ import java.util.Arrays;
 
 public class Nodo implements Comparable<Nodo>{
     private int [] puzzle;
+    private Nodo padre;
     
     public Nodo(int [] puzzle){
         this.puzzle = puzzle;
+    }
+   
+    public void setPadre(Nodo padre){
+        this.padre = padre;
     }
     
     public int [] getPuzzle(){
@@ -19,7 +24,7 @@ public class Nodo implements Comparable<Nodo>{
         this.puzzle = puzzle;
     }
     
-    public String mostrarCuadrito(){
+    public String mostrar(){
         String res = "";
         for(int i = 0; i < puzzle.length ; i++){
             res += puzzle[i];
