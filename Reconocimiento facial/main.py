@@ -1,7 +1,7 @@
 import cv2
 import os
 
-path = 'C:/Users/jadiaz/Documents/Python/Reconocimiento facial/Data'
+path = 'C:/Users/jadiaz/OneDrive - DAFI S.C/Documentos/Python/Inteligencia-Artificial/Reconocimiento facial/Data'
 imagePaths = os.listdir(path)
 print('imagePaths=',imagePaths)
 
@@ -13,7 +13,8 @@ face_recognizer.read('ModeloEigenFace.xml')
 #cap = cv2.VideoCapture('Pruebas/RubiPrueba1.mp4')
 
 #cap = cv2.VideoCapture('Pruebas/WillSmithPrueba0.mp4')
-cap = cv2.VideoCapture('Pruebas/WillSmithPrueba1.mp4')
+#cap = cv2.VideoCapture('Pruebas/WillSmithPrueba1.mp4')
+cap = cv2.VideoCapture('Pruebas/AdrianPrueba0.mp4')
 
 faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')
 
@@ -33,8 +34,16 @@ while True:
         cv2.putText(frame,'{}'.format(result),(x,y-5),1,1.3,(255,255,0),1,cv2.LINE_AA)
         # EigenFaces
         
+        #Will Smith
         '''
-        if result[1] < 5700:
+        if result[1] < 4000:
+            cv2.putText(frame,'{}'.format(imagePaths[result[0]]),(x,y-25),2,1.1,(0,255,0),1,cv2.LINE_AA)
+            cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
+        else:
+            cv2.putText(frame,'Desconocido',(x,y-20),2,0.8,(0,0,255),1,cv2.LINE_AA)
+            cv2.rectangle(frame, (x,y),(x+w,y+h),(0,0,255),2)
+        '''
+        if result[1] < 6750:
             cv2.putText(frame,'{}'.format(imagePaths[result[0]]),(x,y-25),2,1.1,(0,255,0),1,cv2.LINE_AA)
             cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
         else:
@@ -50,6 +59,7 @@ while True:
             cv2.putText(frame,'Desconocido',(x,y-20),2,0.8,(0,0,255),1,cv2.LINE_AA)
             cv2.rectangle(frame, (x,y),(x+w,y+h),(0,0,255),2)
         
+        '''
         
         '''
         # LBPHFace

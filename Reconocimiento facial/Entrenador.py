@@ -2,7 +2,7 @@ import cv2
 import os
 import numpy as np
 
-path = 'C:/Users/jadiaz/Documents/Python/Reconocimiento facial/Data'
+path = 'C:/Users/jadiaz/OneDrive - DAFI S.C/Documentos/Python/Inteligencia-Artificial/Reconocimiento facial/Data'
 peopleList = os.listdir(path)
 print('Lista de personas:', peopleList)
 
@@ -26,6 +26,7 @@ for nameDir in peopleList:
     
 print('labels=', labels)
 print('Numero de etiquetas 0:', np.count_nonzero(np.array(labels)==0))
+print('Numero de etiquetas 1:', np.count_nonzero(np.array(labels)==1))
 
 face_recognizer = cv2.face.EigenFaceRecognizer_create()
 

@@ -3,8 +3,9 @@ import os
 import imutils
 
 #nombre = 'Rubi'
-nombre = 'WillSmith'
-path = 'C:/Users/jadiaz/Documents/Python/Reconocimiento facial/Data'
+#nombre = 'WillSmith'
+nombre = 'AdrianDiaz'
+path = 'C:/Users/jadiaz/OneDrive - DAFI S.C/Documentos/Python/Inteligencia-Artificial/Reconocimiento facial/Data'
 personPath = path + '/' + nombre
 
 if not os.path.exists(personPath):
@@ -12,7 +13,8 @@ if not os.path.exists(personPath):
     print('Carpeta creada: ', personPath)
     
 #cap = cv2.VideoCapture("Rubi.mp4")
-cap = cv2.VideoCapture("WillSmith.mp4")
+#cap = cv2.VideoCapture("WillSmith2.mp4")
+cap = cv2.VideoCapture("AdrianDiaz1.mp4")
 
 faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
@@ -37,7 +39,7 @@ while True:
     cv2.imshow('frame',frame)
 
     k =  cv2.waitKey(1)
-    if k == 27 or count >= 500:
+    if k == 27 or count >= 300:
         break
     
 cap.release()
